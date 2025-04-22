@@ -236,11 +236,11 @@ class CrudClients(ICrud):
         validar = Valida()
         
         gotoxy(10, 4); print("Nombre:")
-        nombre = input()
-        gotoxy(10, 5); print("Apellido:")
-        apellido = input()
-        gotoxy(10, 6); print("Cédula:")
-        dni = validar.solo_numeros("Error: Solo números", 20, 6)
+        gotoxy(18, 4);nombre = input()
+        gotoxy(10, 6); print("Apellido:")
+        gotoxy(20, 6);apellido = input()
+        gotoxy(10, 8); print("Cédula:")
+        gotoxy(10, 8);dni = validar.solo_numeros("Error: Solo números", 20, 8)
 
         json_file = JsonFile(path + '/archivos/clients.json')
         data = json_file.read()
@@ -265,9 +265,9 @@ class CrudClients(ICrud):
         for client in data:
             if client["dni"] == dni:
                 gotoxy(10, 4); print("Nuevo nombre:")
-                client["nombre"] = input()
+                gotoxy(23, 4);client["nombre"] = input()
                 gotoxy(10, 5); print("Nuevo apellido:")
-                client["apellido"] = input()
+                gotoxy(25, 5);client["apellido"] = input()
                 json_file.save(data)
                 gotoxy(10, 7); print(green_color + "✔ Cliente actualizado" + reset_color)
                 actualizado = True
@@ -315,11 +315,11 @@ class CrudProducts(ICrud):
         gotoxy(10, 2); print("Ingrese ID del producto:")
         id_ = int(validar.solo_numeros("Error", 35, 2))
         gotoxy(10, 3); print("Descripción:")
-        descrip = input()
+        gotoxy(23, 3);descrip = input()
         gotoxy(10, 4); print("Precio:")
-        preci = float(validar.solo_numeros("Error", 30, 4))
+        gotoxy(13, 4);preci = float(validar.solo_numeros("Error", 18, 4))
         gotoxy(10, 5); print("Stock:")
-        stock = int(validar.solo_numeros("Error", 30, 5))
+        stock = int(validar.solo_numeros("Error", 18, 5))
 
         json_file = JsonFile(path + '/archivos/products.json')
         data = json_file.read()
