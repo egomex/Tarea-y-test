@@ -429,7 +429,7 @@ class CrudSales(ICrud):
             prods = json_file.find("id",id)
             if not prods:
                 gotoxy(24,9+line);print("Producto no existe")
-                time.sleep(1)
+                time.sleep(5)
                 gotoxy(24,9+line);print(" "*20)
             else:    
                 prods = prods[0]
@@ -463,11 +463,65 @@ class CrudSales(ICrud):
             gotoxy(20,10+line);print("🤣 Venta Cancelada 🤣"+reset_color)    
         time.sleep(2)    
     
-    def update():
-        pass
+    def update(self):
+        borrarPantalla()
+        validar = Valida()
+        gotoxy(10, 2); print("Ingrese el número de factura a modificar:")
+        factura = int(validar.solo_numeros("Error: Solo números", 50, 2))
+
+        json_file = JsonFile(path + '/archivos/invoices.json')
+        ventas = json_file.read()
+
+        for venta in ventas:
+            if venta["factura"] == factura:
+                gotoxy(10, 4); print("Factura encontrada:")
+                gotoxy(10, 5); print(f"Cliente: {venta['cliente']}")
+                gotoxy(10, 6); print("Desea modificar esta venta? (s/n):")
+                confirm = input().lower()
+
+                if confirm == 's':
+                    # Por simplicidad, eliminamos la venta original y volvemos a crearla
+                    ventas.remove(venta)
+                    json_file.save(ventas)
+                    gotoxy(10, 8); print("✔ Ingrese los nuevos datos de la venta")
+                    time.sleep(2)
+                    self.create()  # Reutilizamos create para volver a registrar
+                else:
+                    gotoxy(10, 8); print("❌ Modificación cancelada")
+                break
+        else:
+            gotoxy(10, 7); print("❌ Factura no encontrada")
+
+        time.sleep(2)
+
     
-    def delete():
-        pass
+    def delete(self):
+        borrarPantalla()
+        validar = Valida()
+        gotoxy(10, 2); print("Ingrese el número de factura a eliminar:")
+        factura = int(validar.solo_numeros("Error: Solo números", 50, 2))
+
+        json_file = JsonFile(path + '/archivos/invoices.json')
+        ventas = json_file.read()
+
+        for venta in ventas:
+            if venta["factura"] == factura:
+                gotoxy(10, 4); print("Factura encontrada:")
+                gotoxy(10, 5); print(f"Cliente: {venta['cliente']}")
+                gotoxy(10, 6); print("¿Está seguro que desea eliminarla? (s/n):")
+                confirm = input().lower()
+                if confirm == 's':
+                    ventas.remove(venta)
+                    json_file.save(ventas)
+                    gotoxy(10, 8); print("🗑️ Venta eliminada correctamente")
+                else:
+                    gotoxy(10, 8); print("❌ Eliminación cancelada")
+                break
+        else:
+            gotoxy(10, 7); print("❌ Factura no encontrada")
+
+        time.sleep(2)
+
     
     def consult(self):
         print('\033c', end='')
@@ -554,6 +608,10 @@ while opc !='4':
             elif opc3 == "2":
                 sales.consult()
                 time.sleep(2)
+            elif opc3 == "3":
+                sales.update()
+            elif opc3 == "4":
+                sales.delete()
      
     print("Regresando al menu Principal...")
     time.sleep(2)            
